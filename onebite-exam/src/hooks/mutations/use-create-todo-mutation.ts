@@ -1,9 +1,9 @@
 import { createTodo } from "@/api/create-todo";
 import { QUERY_KEYS } from "@/lib/constants";
+import type { Todo } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useCreateTodoMutation() {
-
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -14,11 +14,12 @@ export function useCreateTodoMutation() {
     //요청 종료
     onSettled: () => {},
     //요청 성공
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.todo.list,
-      })
-      // window.location.reload(); 깔끔한 방법은 아님(모든 데이터를 새로 불러오기 때문)
+    onSuccess: (newTodo) => { //createTodo의 반환값이 매개변수로 제공됨
+      // 데이터가 많을 경우를 대비해 리패칭 없이 새로운 데이터 불러오기(기존 캐시값 뒤에 추가)
+      queryClient.setQueryData<Todo[]>(QUERY_KEYS.todo.list, (prevTodos) => {
+        if (!prevTodos) return [newTodo];
+        return [...prevTodos, newTodo];
+      });
     },
     //요청 실패
     onError: (error) => {
