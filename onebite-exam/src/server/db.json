@@ -1,19 +1,30 @@
 {
   "todos": [
     {
-      "id": 1,
+      "id": "1",
       "content": "Todo 1",
       "isDone": true
     },
     {
-      "id": 2,
+      "id": "2",
       "content": "Todo 2",
       "isDone": true
     },
     {
-      "id": 3,
+      "id": "3",
       "content": "Todo 3",
       "isDone": false
+    },
+    {
+      "content": "123",
+      "isDone": false,
+      "id": "1dq3jSN5rhE"
+    },
+    {
+      "content": "222",
+      "isDone": false,
+      "id": "xqKnbArpLDI"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
