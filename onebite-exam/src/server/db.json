@@ -3,7 +3,8 @@
     {
       "id": "1",
       "content": "Todo 1",
-      "isDone": true
+      "isDone": false
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

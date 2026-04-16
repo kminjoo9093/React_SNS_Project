@@ -5,6 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 export const useTodosData = () => {
   return useQuery({
     queryFn: fetchTodos,
-    queryKey: QUERY_KEYS.todo.all,
+    queryKey: QUERY_KEYS.todo.list,
   });
 };
