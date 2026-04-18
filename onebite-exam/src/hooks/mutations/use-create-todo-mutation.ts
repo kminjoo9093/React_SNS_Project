@@ -14,12 +14,23 @@ export function useCreateTodoMutation() {
     //요청 종료
     onSettled: () => {},
     //요청 성공
-    onSuccess: (newTodo) => { //createTodo의 반환값이 매개변수로 제공됨
-      // 데이터가 많을 경우를 대비해 리패칭 없이 새로운 데이터 불러오기(기존 캐시값 뒤에 추가)
-      queryClient.setQueryData<Todo[]>(QUERY_KEYS.todo.list, (prevTodos) => {
-        if (!prevTodos) return [newTodo];
-        return [...prevTodos, newTodo];
+    onSuccess: (newTodo) => {
+      //createTodo의 반환값이 매개변수로 제공됨
+      queryClient.setQueryData<Todo>(
+        QUERY_KEYS.todo.detail(newTodo.id),
+        newTodo,
+      );
+
+      queryClient.setQueryData<string[]>(QUERY_KEYS.todo.list, (prevIds) => {
+        if (!prevIds) return [newTodo.id];
+        return [...prevIds, newTodo.id];
       });
+
+      // 데이터가 많을 경우를 대비해 리패칭 없이 새로운 데이터 불러오기(기존 캐시값 뒤에 추가)
+      // queryClient.setQueryData<Todo[]>(QUERY_KEYS.todo.list, (prevTodos) => {
+      //   if (!prevTodos) return [newTodo];
+      //   return [...prevTodos, newTodo];
+      // });
     },
     //요청 실패
     onError: (error) => {
