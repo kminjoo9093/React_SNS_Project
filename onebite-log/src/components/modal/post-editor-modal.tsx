@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { useCreatePost } from "@/hooks/mutations/post/use-create-post";
 import { toast } from "sonner";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
+import { useSession } from "@/store/session";
 
 type Image = {
   file: File;
@@ -13,6 +14,7 @@ type Image = {
 };
 
 export default function PostEditorModal() {
+  const session = useSession();
   const { isOpen, close } = usePostEditorModal();
   const { mutate: createPost, isPending: isCreatePostPending } = useCreatePost({
     onSuccess: () => {
@@ -37,7 +39,11 @@ export default function PostEditorModal() {
 
   const handleCreatePostClick = () => {
     if (content.trim() === "") return;
-    createPost(content);
+    createPost({
+      content,
+      images: images.map((image) => image.file),
+      userId: session!.user.id, //session 반드시 있을거라 단언(라우트 가드를 통과했기 때문)
+    });
   };
 
   const handleSelectImages = (e: ChangeEvent<HTMLInputElement>) => {
@@ -107,7 +113,7 @@ export default function PostEditorModal() {
                       className="h-full w-full rounded-sm object-cover"
                     />
                     <div
-                      onClick={()=>handleDeleteImage(image)}
+                      onClick={() => handleDeleteImage(image)}
                       className="absolute top-0 right-0 m-1 cursor-pointer rounded-full bg-black/30 p-1"
                     >
                       <XIcon className="h-4 w-4 text-white" />
