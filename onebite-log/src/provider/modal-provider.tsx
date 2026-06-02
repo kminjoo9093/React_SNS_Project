@@ -1,3 +1,4 @@
+import AlertModal from "@/components/modal/alert-modal";
 import PostEditorModal from "@/components/modal/post-editor-modal";
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
@@ -14,21 +15,23 @@ import { createPortal } from "react-dom";
 
 //ModalProvider는 모달들을 App컴포넌트 아래에 렌더링 시키는 역할
 //=> 여러개의 모달을 쓸 경우 하나의 provider안에 여러 모달을 넣으면 됨
-    //   {createPortal(
-    //     <>
-    //     <Modal 1 />
-    //     <Modal 2/>
-    //     </>,
-    //     document.getElementById("modal-root")!,
-    //   )}
-
+//   {createPortal(
+//     <>
+//     <Modal 1 />
+//     <Modal 2/>
+//     </>,
+//     document.getElementById("modal-root")!,
+//   )}
 
 export default function ModalProvider({ children }: { children: ReactNode }) {
   return (
     <>
       {/* <PostEditorModal/> */}
       {createPortal(
-        <PostEditorModal />,
+        <>
+          <PostEditorModal />
+          <AlertModal />
+        </>,
         document.getElementById("modal-root")!,
       )}
       {children}
