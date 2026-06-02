@@ -36,15 +36,37 @@ export default function PostEditorModal() {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  //textArea 높이 늘리기
+  useEffect(() => {
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = "auto"; //높이 초기화 먼저
+      textAreaRef.current.style.height =
+        textAreaRef.current.scrollHeight + "px";
+    }
+  }, [content]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      images.forEach((image) => {
+        URL.revokeObjectURL(image.previewUrl); //메모리에서 이미지 삭제
+      })
+
+      return;
+    }
+    textAreaRef.current?.focus();
+    setContent("");
+    setImages([]);
+  }, [isOpen]);
+
   const handleCloseModal = () => {
-    if(content !== "" || images.length !== 0) {
+    if (content !== "" || images.length !== 0) {
       openAlertModal({
         title: "게시글 작성이 마무리 되지 않았습니다.",
         description: "이 화면에서 나가면 작성중이던 내용이 사라집니다.",
-        onPositive: ()=>{
-          close() //post 작성 모달 닫힘
+        onPositive: () => {
+          close(); //post 작성 모달 닫힘
         },
-      })
+      });
 
       return;
     }
@@ -78,23 +100,9 @@ export default function PostEditorModal() {
     setImages((prevImages) =>
       prevImages.filter((item) => item.previewUrl !== image.previewUrl),
     );
+
+    URL.revokeObjectURL(image.previewUrl); //메모리에서 이미지 삭제
   };
-
-  //textArea 높이 늘리기
-  useEffect(() => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = "auto"; //높이 초기화 먼저
-      textAreaRef.current.style.height =
-        textAreaRef.current.scrollHeight + "px";
-    }
-  }, [content]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    textAreaRef.current?.focus();
-    setContent("");
-    setImages([]);
-  }, [isOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={handleCloseModal}>
