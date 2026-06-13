@@ -1,10 +1,13 @@
 import { fetchPosts } from "@/api/post";
 import { QUERY_KEYS } from "@/lib/constants"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 
 const PAGE_SIZE = 5;
 
 export function useInfinitePostsData(){
+
+  const queryClient = useQueryClient();
+
   return useInfiniteQuery({
     queryKey: QUERY_KEYS.post.list,
     //pageParam : 현재 불러와야 하는 페이지의 번호
