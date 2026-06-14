@@ -1,15 +1,30 @@
 import { updatePost } from "@/api/post";
-import type { UseMuationCallback } from "@/types";
-import { useMutation } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/lib/constants";
+import type { Post, UseMuationCallback } from "@/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useUpdatePost(callbacks?:UseMuationCallback){
+export function useUpdatePost(callbacks?: UseMuationCallback) {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: updatePost,
-    onSuccess: ()=>{
-      if(callbacks?.onSuccess) callbacks.onSuccess();
+    onSuccess: (updatedPost) => {
+      if (callbacks?.onSuccess) callbacks.onSuccess();
+
+      //수정된 포스트만 업데이트
+      queryClient.setQueryData<Post>(
+        QUERY_KEYS.post.byId(updatedPost.id),
+        (prevPost) => {
+          if (!prevPost)
+            throw new Error(
+              `${updatedPost.id}에 해당하는 포스트를 캐시 데이터에서 찾을 수 없습니다.`,
+            );
+          return { ...prevPost, ...updatedPost };
+        },
+      );
     },
-    onError: (error)=>{
-      if(callbacks?.onError) callbacks.onError(error);
-    }
-  })
+    onError: (error) => {
+      if (callbacks?.onError) callbacks.onError(error);
+    },
+  });
 }
