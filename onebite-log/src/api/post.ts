@@ -2,14 +2,25 @@ import supabase from "@/lib/supabase";
 import { uploadImages } from "./images";
 import type { PostEntity } from "@/types";
 
-export async function fetchPosts({from, to}:{from: number, to: number}) {
+export async function fetchPosts({ from, to }: { from: number; to: number }) {
   const { data, error } = await supabase
     .from("post")
     .select("*, author: profile!author_id (*)") //profile 테이블 조인
     .order("created_at", { ascending: false })
     .range(from, to);
 
-  if(error) throw error;
+  if (error) throw error;
+  return data;
+}
+
+export async function fetchPostById(postId: number) {
+  const { data, error } = await supabase
+    .from("post")
+    .select("*, author: profile!author_id (*)")
+    .eq("id", postId)
+    .single();
+
+  if (error) throw error;
   return data;
 }
 
