@@ -13,18 +13,23 @@ import { useSession } from "@/store/session";
 import { usePostByIdData } from "@/hooks/queries/use-post-byId-data";
 import Loader from "@/components/loader";
 import Fallback from "@/components/fallback";
+import LikePostButton from "./like-post-button";
 
-
-export default function PostItem({postId}: {postId: number}) {
+export default function PostItem({ postId }: { postId: number }) {
   const session = useSession();
   const userId = session?.user.id;
 
-  const {data: post, isPending, error} = usePostByIdData({
-    postId, type: "FEED"
+  const {
+    data: post,
+    isPending,
+    error,
+  } = usePostByIdData({
+    postId,
+    type: "FEED",
   });
 
-  if(isPending) return <Loader/>
-  if(error) return <Fallback/>
+  if (isPending) return <Loader />;
+  if (error) return <Fallback />;
 
   const isMine = post.author_id === userId;
 
@@ -87,10 +92,7 @@ export default function PostItem({postId}: {postId: number}) {
       {/* 3. 좋아요, 댓글 버튼 */}
       <div className="flex gap-2">
         {/* 3-1. 좋아요 버튼 */}
-        <div className="hover:bg-muted flex cursor-pointer items-center gap-2 rounded-xl border-1 p-2 px-4 text-sm">
-          <HeartIcon className="h-4 w-4" />
-          <span>0</span>
-        </div>
+        <LikePostButton id={post.id} likeCount={post.like_count} />
 
         {/* 3-2. 댓글 버튼 */}
         <div className="hover:bg-muted flex cursor-pointer items-center gap-2 rounded-xl border-1 p-2 px-4 text-sm">
