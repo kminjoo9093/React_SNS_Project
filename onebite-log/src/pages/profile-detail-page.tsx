@@ -1,3 +1,24 @@
+import PostFeed from "@/components/post/post-feed";
+import ProfileInfo from "@/components/profile/profile-info";
+import { useEffect } from "react";
+import { Navigate, useParams } from "react-router";
+
 export default function ProfileDetailPage() {
-  return <div>profileDetailPage</div>;
+  const params = useParams();
+  const userId = params.userId;
+
+  //마운트 시 스크롤 최상단으로 이동하도록
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  if (!userId) return <Navigate to={"/"} replace />;
+
+  return (
+    <div className="flex flex-col gap-10">
+      <ProfileInfo userId={userId} />
+      <div className="border-b"></div>
+      <PostFeed authorId={userId} />
+    </div>
+  );
 }
