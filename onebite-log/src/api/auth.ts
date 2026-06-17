@@ -1,6 +1,16 @@
 import supabase from "@/lib/supabase";
 import type { Provider } from "@supabase/supabase-js";
 
+export async function signOut(){
+  const {error} = await supabase.auth.signOut();
+
+  if(error){
+    await supabase.auth.signOut({
+      scope: "local" //로컬스토리지에 보관된 액세스 토큰을 날림
+    })
+  }
+}
+
 export async function signUp({
   email,
   password,
