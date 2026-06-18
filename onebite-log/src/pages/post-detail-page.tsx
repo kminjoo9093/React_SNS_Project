@@ -1,3 +1,19 @@
-export default function postDetailPage() {
-  return <div>postDetailPage</div>;
+import CommentList from "@/components/comment/commemt-list";
+import CommentEditor from "@/components/comment/comment-editor";
+import PostItem from "@/components/post/post-item";
+import { Navigate, useParams } from "react-router";
+
+export default function PostDetailPage() {
+
+  const params = useParams();
+  const postId = params.postId;
+
+  if(!postId) return <Navigate to={"/"}/>
+
+  return <div className="flex flex-col gap-5">
+    <PostItem postId={Number(postId)} type={"DETAIL"}/>
+    <div className="text-xl font-bold">댓글</div>
+    <CommentEditor/>
+    <CommentList/>
+  </div>;
 }
