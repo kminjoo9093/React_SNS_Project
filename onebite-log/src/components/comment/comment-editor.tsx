@@ -21,6 +21,7 @@ type ReplyMode = {
   type: "REPLY";
   postId: number;
   parentCommentId: number;
+  rootCommentId: number;
   onClose: () => void;
 };
 
@@ -69,7 +70,8 @@ export default function CommentEditor(props: Props) {
       createComment({
         postId: props.postId,
         content,
-        parentCommentId: props.parentCommentId
+        parentCommentId: props.parentCommentId,
+        rootCommentId: props.rootCommentId,
       })
     }
     else {
