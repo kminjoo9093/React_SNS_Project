@@ -3,12 +3,13 @@ import logo from "@/assets/logo.png";
 import { SunIcon } from "lucide-react";
 import defaultAvatar from "@/assets/default-avatar.png";
 import ProfileButton from "./header/profile-button";
+import ThemeButton from "./header/theme-button";
 
 export default function GlobalLayout() {
   return (
-    <div className="flex flex-col min-h-[100vh]">
+    <div className="flex min-h-[100vh] flex-col">
       <header className="h-15 border-b">
-        <div className="flex h-full w-full max-w-175 justify-between m-auto px-4">
+        <div className="m-auto flex h-full w-full max-w-175 justify-between px-4">
           <Link to="/" className="flex items-center gap-2">
             <img
               className="h-5"
@@ -18,17 +19,17 @@ export default function GlobalLayout() {
             <div className="font-bold">한입 로그</div>
           </Link>
           <div className="flex items-center gap-5">
-            <div className="hover:bg-muted cursor-pointer rounded-full p-2">
-              <SunIcon />
-            </div>
-            <ProfileButton/>
+            <ThemeButton />
+            <ProfileButton />
           </div>
         </div>
       </header>
-      <main className="w-full max-w-175 m-auto border-x px-4 py-6 flex-1">
+      <main className="m-auto w-full max-w-175 flex-1 border-x px-4 py-6">
         <Outlet />
       </main>
-      <footer className="border-t text-center text-muted-foreground py-10">@winterlood</footer>
+      <footer className="text-muted-foreground border-t py-10 text-center">
+        @winterlood
+      </footer>
     </div>
   );
 }
